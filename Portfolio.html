@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0000aa">
+  <meta name="description" content="Mohan Tristan C. Garcia — BSIT Programming Laboratory Portfolio">
+  <title>Mohan Tristan C. Garcia | Retro Portfolio</title>
+  
+  <!-- Retro VCR Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- VARIABLES & BASE --- */
+    :root {
+      --bg: #020205;
+      --vcr-blue: #0000aa;
+      --text-main: #ffffff;
+      --text-dim: #a0a0a0;
+      --neon-cyan: #0ff;
+      --neon-magenta: #f0f;
+      --neon-green: #0f0;
+      --neon-yellow: #ff0;
+      --line: rgba(0, 255, 255, 0.3);
+      --max: 1160px;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    
+    body {
+      background: var(--bg); 
+      color: var(--text-main); 
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      line-height: 1.5; 
+      overflow-x: hidden;
+    }
+
+    /* --- CRT OVERLAYS (POINTER-EVENTS NONE) --- */
+    .crt-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .scanlines {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                  linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      background-size: 100% 4px, 6px 100%;
+      opacity: 0.7;
+    }
+
+    .vignette {
+      box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+    }
+
+    .flicker {
+      animation: crt-flicker 0.15s infinite;
+    }
+    
+    @keyframes crt-flicker {
+      0% { opacity: 0.98; }
+      50% { opacity: 1; }
+      100% { opacity: 0.96; }
+    }
+
+    .tracking-noise {
+      position: fixed;
+      bottom: 10%;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background: rgba(255,255,255,0.1);
+      opacity: 0.2;
+      z-index: 99;
+      pointer-events: none;
+      animation: tracking 6s linear infinite;
+    }
+
+    @keyframes tracking {
+      0% { transform: translateY(-100vh); opacity: 0; }
+      10% { opacity: 0.3; }
+      20% { opacity: 0; }
+      80% { opacity: 0; }
+      90% { opacity: 0.5; }
+      100% { transform: translateY(100vh); opacity: 0; }
+    }
+
+    /* --- UTILITIES & ANIMATIONS --- */
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    .container { width: min(var(--max), calc(100% - 40px)); margin-inline: auto; }
+    
+    @keyframes rgb-shift {
+      0% { text-shadow: 2px 0 0 red, -2px 0 0 blue; }
+      33% { text-shadow: -2px 0 0 red, 2px 0 0 blue; }
+      66% { text-shadow: 2px 2px 0 red, -2px -2px 0 blue; }
+      100% { text-shadow: -2px -2px 0 red, 2px 2px 0 blue; }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* --- TOPBAR / NAV --- */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: 72px;
+      background: rgba(2, 2, 5, 0.9); border-bottom: 2px dashed var(--neon-cyan);
+    }
+    .nav { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { font-size: 2rem; color: var(--neon-magenta); text-transform: uppercase; text-shadow: 2px 2px 0 #000; }
+    .brand span { color: var(--neon-cyan); }
+    .nav-links { display: flex; gap: 30px; align-items: center; }
+    .nav-links a { color: var(--text-main); font-size: 1.4rem; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--neon-yellow); animation: rgb-shift 0.3s infinite alternate; }
+    .menu-toggle { display: none; background: transparent; border: 2px solid var(--neon-cyan); color: var(--neon-cyan); padding: 5px 10px; cursor: pointer; text-transform: uppercase; }
+    .menu-toggle:hover { background: var(--neon-cyan); color: #000; }
+
+    /* --- TYPOGRAPHY --- */
+    h1, h2, h3 { text-transform: uppercase; font-weight: normal; }
+    h1 { font-size: clamp(3rem, 8vw, 6rem); line-height: 0.9; margin: 20px 0; color: var(--neon-cyan); text-shadow: 3px 3px 0 var(--neon-magenta); }
+    h1 span { display: block; color: var(--text-main); }
+    h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 15px; color: var(--neon-magenta); border-left: 5px solid var(--neon-cyan); padding-left: 15px; }
+    h2 span { color: var(--neon-yellow); }
+    .eyebrow { color: var(--neon-green); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+
+    /* --- BUTTONS --- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 10px 20px; border: 2px solid var(--neon-cyan); background: transparent;
+      color: var(--neon-cyan); text-transform: uppercase; font-size: 1.2rem;
+      cursor: pointer; transition: all 0.2s;
+      box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.2);
+    }
+    .btn:hover {
+      background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan);
+      transform: scale(1.05);
+    }
+    .btn.secondary { border-color: var(--neon-magenta); color: var(--neon-magenta); box-shadow: inset 0 0 10px rgba(255, 0, 255, 0.2); }
+    .btn.secondary:hover { background: var(--neon-magenta); color: #000; box-shadow: 0 0 15px var(--neon-magenta); }
+
+    /* --- LAYOUT SECTIONS --- */
+    section { padding: 100px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); }
+    .section-head { margin-bottom: 40px; }
+    .section-note { color: var(--text-dim); font-size: 1.2rem; margin-top: 10px; }
+
+    /* Hero */
+    .hero { min-height: 80vh; display: grid; align-items: center; padding-top: 140px; position: relative; }
+    .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; }
+    .hero-copy { font-size: 1.4rem; margin-bottom: 30px; color: var(--text-dim); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 15px; }
+    .osd-time { position: absolute; top: 100px; right: 20px; font-size: 1.5rem; text-align: right; color: var(--text-main); text-shadow: 2px 2px 0 #000; }
+    .osd-sp { color: var(--neon-green); margin-bottom: 5px; }
+
+    /* About */
+    .about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
+    .about-box { border: 2px solid var(--neon-magenta); padding: 25px; background: rgba(255, 0, 255, 0.05); }
+    .about-box h3 { color: var(--neon-yellow); font-size: 2rem; margin-bottom: 15px; }
+    .meta-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .tag { border: 1px solid var(--neon-cyan); color: var(--neon-cyan); padding: 5px 10px; font-size: 1rem; text-transform: uppercase; }
+
+    /* Task Grids */
+    .task-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .task-card {
+      border: 2px solid var(--line); padding: 20px;
+      background: rgba(0, 0, 20, 0.6); display: flex; flex-direction: column;
+      transition: all 0.3s ease; position: relative;
+    }
+    .task-card:hover {
+      border-color: var(--neon-cyan); background: #000;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.1);
+      transform: translateY(-5px);
+    }
+    .task-card:hover h3 { animation: rgb-shift 0.3s infinite alternate; }
+    .task-top { display: flex; justify-content: space-between; color: var(--neon-green); font-size: 1.1rem; border-bottom: 1px solid var(--line); padding-bottom: 5px; margin-bottom: 15px; }
+    .task-card h3 { font-size: 1.8rem; margin-bottom: 10px; color: var(--text-main); }
+    .task-card p { color: var(--text-dim); flex: 1; font-size: 1.2rem; }
+    .task-links { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .task-links a { color: var(--neon-yellow); text-transform: uppercase; font-size: 1.1rem; }
+    .task-links a:hover { color: var(--neon-magenta); text-decoration: underline; }
+    .empty-state { grid-column: 1 / -1; padding: 40px; border: 2px dashed var(--text-dim); text-align: center; color: var(--text-dim); font-size: 1.4rem; text-transform: uppercase; }
+
+    /* Contact & Footer */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .contact-card { border: 2px solid var(--line); padding: 30px; }
+    .contact-card h3 { color: var(--neon-cyan); font-size: 2rem; margin-bottom: 15px; }
+    .contact-links { display: flex; gap: 20px; margin-top: 20px; }
+    .contact-links a { font-size: 1.4rem; color: var(--text-main); border-bottom: 2px solid var(--neon-magenta); padding-bottom: 2px; }
+    .contact-links a:hover { color: var(--neon-yellow); border-color: var(--neon-yellow); }
+    
+    footer { text-align: center; padding: 30px 0 100px; color: var(--text-dim); font-size: 1.2rem; text-transform: uppercase; border-top: 2px dashed var(--line); }
+
+    /* --- MUSIC CONTROLS (VCR STYLE) --- */
+    .music-panel {
+      position: fixed; z-index: 60; right: 20px; bottom: 20px;
+      display: flex; align-items: center; gap: 15px;
+      padding: 15px; background: #000; border: 3px solid var(--text-dim);
+      box-shadow: 4px 4px 0 var(--text-dim);
+    }
+    .music-panel .vcr-btn {
+      background: transparent; border: 2px solid #555; color: #fff;
+      padding: 8px 15px; cursor: pointer; font-size: 1.2rem;
+      text-transform: uppercase; font-weight: bold; transition: all 0.1s;
+    }
+    .music-panel .vcr-btn:hover { background: #333; border-color: #fff; }
+    .music-panel .vcr-btn:active { transform: scale(0.95); }
+    .music-panel .status-text { color: var(--neon-green); font-size: 1.2rem; text-transform: uppercase; min-width: 100px; text-align: center; }
+
+    /* --- WELCOME SCREEN (BLUE VCR SCREEN) --- */
+    .welcome-screen {
+      position: fixed; inset: 0; z-index: 200; display: grid; place-items: center;
+      background: var(--vcr-blue); color: white;
+      transition: opacity 0.5s, visibility 0.5s;
+    }
+    .welcome-screen.leaving { opacity: 0; visibility: hidden; pointer-events: none; }
+    .welcome-content { text-align: center; padding: 40px; border: 4px solid #fff; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+    
+    /* --- NEW VHS PLAY SEQUENCE --- */
+    .vhs-play-state {
+      display: none; position: absolute; inset: 0; 
+      background: var(--vcr-blue); z-index: 201;
+    }
+    .vhs-play-state .play-text {
+      position: absolute; top: 40px; left: 50px;
+      color: var(--neon-green); font-size: 4rem; 
+      animation: blink 1s step-end infinite;
+      text-shadow: 2px 2px 0 #000;
+    }
+    .vhs-static {
+      position: absolute; inset: 0; pointer-events: none; opacity: 0.25;
+      background: repeating-linear-gradient(transparent, transparent 2px, rgba(0,0,0,0.6) 2px, rgba(0,0,0,0.6) 4px);
+      animation: static-jitter 0.15s infinite;
+    }
+    @keyframes static-jitter {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(3px); }
+      100% { transform: translateY(-2px); }
+    }
+
+    .welcome-title { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 10px; text-transform: uppercase; }
+    .welcome-subtitle { font-size: 1.5rem; margin-bottom: 30px; color: #ccc; text-transform: uppercase; }
+    .enter-button {
+      background: transparent; border: 4px solid #fff; color: #fff;
+      padding: 15px 30px; font-size: 2rem; cursor: pointer;
+      text-transform: uppercase; animation: blink 1.5s step-end infinite;
+    }
+    .enter-button:hover { background: #fff; color: var(--vcr-blue); animation: none; }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 850px) {
+      .hero-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .osd-time { position: static; text-align: left; margin-bottom: 20px; }
+      .hero { padding-top: 100px; }
+    }
+    @media (max-width: 620px) {
+      .menu-toggle { display: block; }
+      .nav-links { 
+        display: none; position: absolute; top: 72px; left: 0; right: 0; 
+        background: #000; border-bottom: 2px solid var(--neon-cyan); 
+        flex-direction: column; padding: 20px; align-items: flex-start; 
+      }
+      .nav-links.open { display: flex; }
+      .music-panel { left: 20px; justify-content: center; }
+    }
+  </style>
+</head>
+<body class="flicker">
+
+  <!-- CRT Overlays -->
+  <div class="crt-overlay scanlines"></div>
+  <div class="crt-overlay vignette"></div>
+  <div class="tracking-noise"></div>
+
+  <!-- Welcome Screen -->
+  <div class="welcome-screen" id="welcomeScreen">
+    <div class="welcome-content" id="welcomeContent">
+      <div class="welcome-title">MOHAN TRISTAN C. GARCIA</div>
+      <p class="welcome-subtitle">SYS_BOOT: BSIT_PORTFOLIO</p>
+      <button class="enter-button" id="enterPortfolio" type="button">> PRESS PLAY</button>
+    </div>
+
+    <!-- VHS Play Sequence Overlay -->
+    <div class="vhs-play-state" id="vhsPlayState">
+      <div class="play-text">> PLAY</div>
+      <div class="vhs-static"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="topbar">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="#home">MOHAN<span>.</span>GC</a>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false">[ MENU ]</button>
+      <div class="nav-links" id="navLinks">
+        <a href="#home">CH_01: HOME</a>
+        <a href="#about">CH_02: ABOUT</a>
+        <a href="#midterm">CH_03: MIDTERM</a>
+        <a href="#final">CH_04: FINAL</a>
+        <a href="#contact">CH_05: CONTACT</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="reveal">
+          <p class="eyebrow">> SYS.INFO: BSIT • Programming Lab Portfolio</p>
+          <h1>MOHAN TRISTAN <br><span>C. GARCIA</span></h1>
+          <p class="hero-copy">
+            Welcome to the digital archive. This mainframe showcases the laboratory tasks and projects completed throughout the semester — from midterm simulations to final deployments.
+          </p>
+          <div class="hero-actions">
+            <a class="btn" href="#midterm">[ EXPLORE WORK ]</a>
+            <a class="btn secondary" href="#about">[ INIT: ABOUT ]</a>
+          </div>
+        </div>
+        <div class="reveal">
+          <!-- VCR OSD styling instead of the blue flame mark -->
+          <div class="osd-time">
+            <div class="osd-sp">SP &nbsp; <span id="vcrTimer">0:00:00</span></div>
+            <div id="vcrClock">MON 12:00 AM</div>
+            <div style="color: var(--neon-yellow); margin-top: 10px;">> REC</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">DIR: 01 / PROFILE</p>
+          <h2>ABOUT <span>ME</span></h2>
+          <p class="section-note">A little introduction and the purpose of this archive.</p>
+        </div>
+        <div class="about-grid reveal">
+          <div class="about-box" style="display: grid; place-items: center; text-align: center; border-color: var(--neon-cyan);">
+            <div style="font-size: 5rem; color: var(--neon-cyan); margin-bottom: 10px;">✦</div>
+            <div style="color: var(--text-dim); letter-spacing: 2px;">FIRST YEAR • BSIT</div>
+          </div>
+          <div class="about-box">
+            <h3>> Learning one line at a time_</h3>
+            <p style="margin-bottom: 15px;">Hi! I'm <strong>Mohan Tristan C. Garcia</strong>, a first-year Bachelor of Science in Information Technology student at NU Clark.</p>
+            <p>This UI serves as my collection of midterm and final programming laboratory tasks. It reflects the algorithms processed, the skills debugged, and my overall progression in the IT sector.</p>
+            <div class="meta-tags">
+              <span class="tag">NU Clark</span>
+              <span class="tag">BS Info Tech</span>
+              <span class="tag">Programming</span>
+              <span class="tag">System.Portfolio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Midterm Section -->
+    <section id="midterm">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">DIR: 02 / COURSEWORK</p>
+          <h2>MIDTERM <span>LAB TASKS</span></h2>
+          <p class="section-note">Archived midterm laboratory activities and logs.</p>
+        </div>
+        <div class="task-grid" id="midtermGrid">
+          
+          <!-- Task Card 1 -->
+          <article class="task-card reveal">
+            <div class="task-top"><span>MIDTERM_01</span><span>[ JAVA ]</span></div>
+            <h3>Task 01 — 3×3 Matrix Ops</h3>
+            <p>Accepts nine numbers, displays the 3×3 matrix, calculates each row and column sum, and finds both diagonal sums. Includes loop/retry logic.</p>
+            <div class="task-links">
+              <a href="midterm/Matrix.java" target="_blank" rel="noopener">> VIEW_CODE.java</a>
+              <a href="images/task1-code.png" target="_blank" rel="noopener">> VIEW_SCREENSHOT.png</a>
+            </div>
+          </article>
+          
+          <!-- Template Placeholder Card 2 -->
+          <article class="task-card reveal">
+            <div class="task-top"><span>MIDTERM_02</span><span>[ JAVA ]</span></div>
+            <h3>Task 02 — [EDITABLE TITLE]</h3>
+            <p>[EDITABLE DESCRIPTION] Enter the details of your second laboratory activity here. Describe the logic and output.</p>
+            <div class="task-links">
+              <a href="#" target="_blank" rel="noopener">> VIEW_CODE.java</a>
+              <a href="#" target="_blank" rel="noopener">> VIEW_SCREENSHOT.png</a>
+            </div>
+          </article>
+
+          <!-- Template Placeholder Card 3 -->
+          <article class="task-card reveal">
+            <div class="task-top"><span>MIDTERM_03</span><span>[ JAVA ]</span></div>
+            <h3>Task 03 — [EDITABLE TITLE]</h3>
+            <p>[EDITABLE DESCRIPTION] Enter the details of your third laboratory activity here. Describe the logic and output.</p>
+            <div class="task-links">
+              <a href="#" target="_blank" rel="noopener">> VIEW_CODE.java</a>
+              <a href="#" target="_blank" rel="noopener">> VIEW_SCREENSHOT.png</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Final Section -->
+    <section id="final">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">DIR: 03 / COURSEWORK</p>
+          <h2>FINAL <span>LAB TASKS</span></h2>
+        </div>
+        <div class="task-grid" id="finalGrid">
+          <div class="empty-state reveal">
+            [ WARNING: NO DATA FOUND IN DIRECTORY ] <br>
+            <span style="font-size: 1rem; color: #666;">Awaiting deployment of final tasks.</span>
+          </div>
+          <!-- 
+            To add cards here, copy the <article class="task-card">...</article> 
+            from the Midterm section and paste it above this empty-state div (or replace it).
+          -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">DIR: 04 / COMMS</p>
+          <h2>CONTACT <span>ME</span></h2>
+          <p class="section-note">"The path has already been prepared. Now, all that remains is to take the next step." -Yhwach</p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-card reveal">
+            <h3>> ESTABLISH CONNECTION</h3>
+            <p>Transmission end. Thank you for viewing the system portfolio. End of tape.</p>
+          </div>
+          <div class="contact-card reveal" style="border-color: var(--neon-magenta);">
+            <h3 style="color: var(--neon-magenta);">> NETWORK LINKS</h3>
+            <div class="contact-links">
+              <a href="https://www.instagram.com/xiazuuuu/" target="_blank" rel="noopener">INSTAGRAM</a>
+              <a href="https://github.com/xiazuuuu" target="_blank" rel="noopener">GITHUB</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © <span id="year"></span> MOHAN TRISTAN C. GARCIA • SYSTEM_HALT
+    </div>
+  </footer>
+
+  <!-- Hardware VCR Music Player -->
+  <div class="music-panel">
+    <button class="vcr-btn" id="playBtn" title="Play">> PLAY</button>
+    <button class="vcr-btn" id="pauseBtn" title="Pause">|| PAUSE</button>
+    <div class="status-text" id="audioStatus">STOPPED</div>
+    
+    <!-- Audio Source -->
+    <audio id="backgroundAudio" src="audio/Wandenreich%20Theme.mp3" loop preload="none"></audio>
+  </div>
+
+  <!-- JavaScript functionality -->
+  <script>
+    // Set Current Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mobile Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(open));
+    });
+    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }));
+
+    // Scroll Reveal Observer
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(item => revealObserver.observe(item));
+
+    // Audio & Welcome Screen Logic
+    const audio = document.getElementById('backgroundAudio');
+    const playBtn = document.getElementById('playBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const statusText = document.getElementById('audioStatus');
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const welcomeContent = document.getElementById('welcomeContent');
+    const vhsPlayState = document.getElementById('vhsPlayState');
+    const enterButton = document.getElementById('enterPortfolio');
+
+    function updateAudioUI(isPlaying) {
+      if (isPlaying) {
+        statusText.textContent = 'PLAYING';
+        statusText.style.color = 'var(--neon-green)';
+        statusText.style.animation = 'blink 1s step-end infinite';
+      } else {
+        statusText.textContent = 'PAUSED';
+        statusText.style.color = 'var(--neon-yellow)';
+        statusText.style.animation = 'none';
+      }
+    }
+
+    enterButton.addEventListener('click', async () => {
+      // Transition to > PLAY state immediately
+      welcomeContent.style.display = 'none';
+      vhsPlayState.style.display = 'block';
+
+      try {
+        await audio.play();
+        updateAudioUI(true);
+      } catch (error) {
+        console.log("Audio autoplay blocked by browser until user interaction.");
+        updateAudioUI(false);
+      }
+      
+      // Hold the PLAY screen for 2 seconds, then fade out the whole welcome screen
+      setTimeout(() => {
+        welcomeScreen.classList.add('leaving');
+      }, 2000);
+    });
+
+    playBtn.addEventListener('click', async () => {
+      if (audio.paused) {
+        try {
+          await audio.play();
+          updateAudioUI(true);
+          // Add a quick visual glitch on play
+          document.body.style.animation = 'rgb-shift 0.2s 2';
+          setTimeout(() => { document.body.style.animation = ''; }, 400);
+        } catch (e) {
+          console.error("Playback failed", e);
+        }
+      }
+    });
+
+    pauseBtn.addEventListener('click', () => {
+      audio.pause();
+      updateAudioUI(false);
+    });
+
+    audio.addEventListener('pause', () => updateAudioUI(false));
+    audio.addEventListener('play', () => updateAudioUI(true));
+
+    // VCR Clock Logic
+    function updateClock() {
+      const now = new Date();
+      const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+      const day = days[now.getDay()];
+      
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      
+      hours = hours % 12;
+      hours = hours ? hours : 12; // '0' should be '12'
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      
+      document.getElementById('vcrClock').textContent = `${day} ${hours}:${minutes} ${ampm}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Fake VCR Timer logic (runs up while viewing)
+    let secondsElapsed = 0;
+    setInterval(() => {
+      secondsElapsed++;
+      let hrs = Math.floor(secondsElapsed / 3600);
+      let mins = Math.floor((secondsElapsed - (hrs * 3600)) / 60);
+      let secs = secondsElapsed % 60;
+      
+      mins = mins < 10 ? '0' + mins : mins;
+      secs = secs < 10 ? '0' + secs : secs;
+      
+      document.getElementById('vcrTimer').textContent = `${hrs}:${mins}:${secs}`;
+    }, 1000);
+
+  </script>
+</body>
+</html>
