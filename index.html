@@ -128,12 +128,10 @@
     }
     .tv-screen { width: 100%; height: 100%; position: relative; }
     
-    /* Image inside the TV (Color filter removed) */
     .tv-screen img {
       width: 100%; height: 100%; object-fit: cover;
     }
     
-    /* Screen Glare & Scanlines */
     .tv-screen::after {
       content: ""; position: absolute; inset: 0;
       background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.2) 50%), linear-gradient(90deg, rgba(255,0,0,0.06), rgba(0,255,0,0.02), rgba(0,0,255,0.06));
@@ -141,14 +139,12 @@
       box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
     }
     
-    /* TV OSD Text */
     .tv-osd {
       position: absolute; top: 10px; left: 15px; z-index: 10;
       color: var(--vhs-green); font-family: 'VT323', monospace; font-size: 1.5rem;
       text-shadow: 2px 2px 0 #000; animation: blink 1.5s step-end infinite;
     }
     
-    /* TV Side Panel (Knobs & Speaker) */
     .tv-panel { width: 35px; display: flex; flex-direction: column; gap: 15px; justify-content: center; }
     .tv-knob {
       width: 30px; height: 30px; background: #2a2a2a; border-radius: 50%;
@@ -193,7 +189,9 @@
     .music-panel button:hover { background: var(--vhs-green); color: #000; }
     .music-panel audio { display: none; }
 
-    /* VHS Welcome Sequence */
+    /* =========================================
+       ANIMATED VHS WELCOME SEQUENCE 
+       ========================================= */
     .welcome-screen {
       position: fixed; inset: 0; z-index: 200; display: grid; place-items: center;
       background: #050505; transition: opacity 0.4s ease, visibility 0.4s ease;
@@ -210,17 +208,33 @@
     }
     .enter-button:hover { background: var(--vhs-green); color: #000; box-shadow: 0 0 20px var(--vhs-green); }
 
-    /* VCR Classic Blue Screen */
+    /* Animated VCR Classic Blue Screen */
     .vhs-blue-screen {
       display: none; position: absolute; inset: 0;
-      background-color: #172074; /* Authentic deep VCR blue */
-      z-index: 1;
+      background-color: #172074; overflow: hidden; z-index: 1;
     }
+    
+    /* VCR Tracking Band Animation */
+    .vhs-blue-screen::before {
+      content: ""; position: absolute; top: -100%; left: 0; width: 100%; height: 15%;
+      background: rgba(255, 255, 255, 0.05); filter: blur(3px);
+      animation: tracking 2.5s linear infinite; z-index: 1; pointer-events: none;
+    }
+    
+    /* VCR Moving Scanlines Overlay */
+    .vhs-blue-screen::after {
+      content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 200%;
+      background: repeating-linear-gradient(to bottom, transparent, transparent 3px, rgba(255,255,255,0.03) 4px, rgba(255,255,255,0.03) 5px);
+      animation: scanlines 4s linear infinite; z-index: 1; pointer-events: none;
+    }
+
     .vhs-play-text {
       display: none; position: absolute; top: 10%; left: 8%; color: #fff;
       font-family: 'VT323', monospace; font-size: clamp(3rem, 10vw, 6rem);
       text-shadow: 2px 2px 0px rgba(0,0,0,0.5); z-index: 2;
+      animation: blink 1s step-end infinite;
     }
+    
     .vhs-timecode {
       display: none; position: absolute; bottom: 10%; right: 8%; color: #fff;
       font-family: 'VT323', monospace; font-size: clamp(2rem, 6vw, 4rem);
@@ -228,6 +242,17 @@
     }
 
     @keyframes blink { 50% { opacity: 0; } }
+    
+    @keyframes tracking {
+      0% { top: -20%; opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { top: 120%; opacity: 1; }
+    }
+    
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50px); }
+    }
 
     @media (max-width: 850px) {
       .about-grid { grid-template-columns: 1fr; }
@@ -251,6 +276,7 @@
       <button class="enter-button" id="enterPortfolio" type="button">INSERT TAPE</button>
     </div>
     <div class="vhs-play-text" id="vhsPlayText">PLAY</div>
+    <!-- The timecode will be animated by JavaScript -->
     <div class="vhs-timecode" id="vhsTimecode">00:00:00:00</div>
   </div>
 
@@ -402,6 +428,8 @@
     const vhsSound = document.getElementById('vhsSound');
     const audio = document.getElementById('backgroundAudio');
     const musicToggle = document.getElementById('musicToggle');
+    
+    let timecodeInterval;
 
     enterButton.addEventListener('click', async () => {
       // Hide intro content, show Blue Screen + PLAY + Timecode
@@ -409,6 +437,17 @@
       vhsBlueScreen.style.display = 'block';
       vhsPlayText.style.display = 'block';
       vhsTimecode.style.display = 'block';
+
+      // Start the ticking timecode animation (Frames and Seconds)
+      let frames = 0;
+      timecodeInterval = setInterval(() => {
+        frames++;
+        let seconds = Math.floor(frames / 30);
+        let frameCount = frames % 30;
+        let secStr = seconds.toString().padStart(2, '0');
+        let frameStr = frameCount.toString().padStart(2, '0');
+        vhsTimecode.textContent = `00:00:${secStr}:${frameStr}`;
+      }, 33); // Updates ~30 times a second to mimic 30fps video
 
       // Play VHS Insert Sound Effect
       try {
@@ -425,10 +464,11 @@
         musicToggle.textContent = '▶ PLAY';
       }
 
-      // Wait 2 seconds, then fade out transition screen
+      // Wait 2.5 seconds, then stop timecode and fade out transition screen
       setTimeout(() => {
+        clearInterval(timecodeInterval);
         welcomeScreen.classList.add('leaving');
-      }, 2000);
+      }, 2500);
     });
 
     // Background Music Toggle Button
