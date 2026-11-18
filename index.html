@@ -210,16 +210,21 @@
     }
     .enter-button:hover { background: var(--vhs-green); color: #000; box-shadow: 0 0 20px var(--vhs-green); }
 
-    .vhs-play-text {
-      display: none; position: absolute; top: 10%; left: 8%; color: var(--vhs-green);
-      font-family: 'VT323', monospace; font-size: clamp(4rem, 10vw, 8rem);
-      text-shadow: 3px 0 0 #000; animation: blink 1s step-end infinite; z-index: 2;
-    }
-    
     /* VCR Classic Blue Screen */
     .vhs-blue-screen {
       display: none; position: absolute; inset: 0;
-      background-color: #0000e6; z-index: 1;
+      background-color: #172074; /* Authentic deep VCR blue */
+      z-index: 1;
+    }
+    .vhs-play-text {
+      display: none; position: absolute; top: 10%; left: 8%; color: #fff;
+      font-family: 'VT323', monospace; font-size: clamp(3rem, 10vw, 6rem);
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.5); z-index: 2;
+    }
+    .vhs-timecode {
+      display: none; position: absolute; bottom: 10%; right: 8%; color: #fff;
+      font-family: 'VT323', monospace; font-size: clamp(2rem, 6vw, 4rem);
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.5); z-index: 2;
     }
 
     @keyframes blink { 50% { opacity: 0; } }
@@ -234,6 +239,9 @@
 </head>
 <body>
 
+  <!-- VHS SOUND EFFECT -->
+  <audio id="vhsSound" src="audio/vhs-insert.mp3" preload="auto"></audio>
+
   <!-- VHS WELCOME SCREEN -->
   <div class="welcome-screen" id="welcomeScreen">
     <div class="vhs-blue-screen" id="vhsBlueScreen"></div>
@@ -242,7 +250,8 @@
       <p class="welcome-subtitle">TRACKING: BSIT PROGRAMMING PORTFOLIO</p>
       <button class="enter-button" id="enterPortfolio" type="button">INSERT TAPE</button>
     </div>
-    <div class="vhs-play-text" id="vhsPlayText">&gt; PLAY</div>
+    <div class="vhs-play-text" id="vhsPlayText">PLAY</div>
+    <div class="vhs-timecode" id="vhsTimecode">00:00:00:00</div>
   </div>
 
   <header class="topbar">
@@ -387,16 +396,28 @@
     const welcomeScreen = document.getElementById('welcomeScreen');
     const welcomeContent = document.getElementById('welcomeContent');
     const vhsPlayText = document.getElementById('vhsPlayText');
+    const vhsTimecode = document.getElementById('vhsTimecode');
     const vhsBlueScreen = document.getElementById('vhsBlueScreen');
     
+    const vhsSound = document.getElementById('vhsSound');
     const audio = document.getElementById('backgroundAudio');
     const musicToggle = document.getElementById('musicToggle');
 
     enterButton.addEventListener('click', async () => {
+      // Hide intro content, show Blue Screen + PLAY + Timecode
       welcomeContent.style.display = 'none';
       vhsBlueScreen.style.display = 'block';
       vhsPlayText.style.display = 'block';
+      vhsTimecode.style.display = 'block';
 
+      // Play VHS Insert Sound Effect
+      try {
+        await vhsSound.play();
+      } catch (error) {
+        console.log("VHS audio blocked");
+      }
+
+      // Start Background Music
       try {
         await audio.play();
         musicToggle.textContent = '⏸ PAUSE';
@@ -404,11 +425,13 @@
         musicToggle.textContent = '▶ PLAY';
       }
 
+      // Wait 2 seconds, then fade out transition screen
       setTimeout(() => {
         welcomeScreen.classList.add('leaving');
       }, 2000);
     });
 
+    // Background Music Toggle Button
     musicToggle.addEventListener('click', async () => {
       if (audio.paused) {
         try {
