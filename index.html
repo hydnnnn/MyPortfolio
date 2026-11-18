@@ -102,7 +102,7 @@
     .tag { display: inline-block; border: 1px solid var(--vhs-blue); padding: 5px 10px; font-size: 0.8rem; margin: 5px; color: var(--vhs-blue); }
 
     /* =========================================
-       NEW CRT TELEVISION PROFILE PICTURE
+       CRT TELEVISION PROFILE PICTURE
        ========================================= */
     .tv-container {
       background: #1a1a1a;
@@ -128,11 +128,9 @@
     }
     .tv-screen { width: 100%; height: 100%; position: relative; }
     
-    /* Image inside the TV */
+    /* Image inside the TV (Color filter removed) */
     .tv-screen img {
       width: 100%; height: 100%; object-fit: cover;
-      /* Adds a retro blue/green CRT color tint to your profile picture */
-      filter: sepia(40%) hue-rotate(170deg) saturate(90%) contrast(140%);
     }
     
     /* Screen Glare & Scanlines */
@@ -215,13 +213,13 @@
     .vhs-play-text {
       display: none; position: absolute; top: 10%; left: 8%; color: var(--vhs-green);
       font-family: 'VT323', monospace; font-size: clamp(4rem, 10vw, 8rem);
-      text-shadow: 3px 0 0 var(--vhs-red), -3px 0 0 var(--vhs-blue); animation: blink 1s step-end infinite;
+      text-shadow: 3px 0 0 #000; animation: blink 1s step-end infinite; z-index: 2;
     }
     
-    .vhs-noise {
+    /* VCR Classic Blue Screen */
+    .vhs-blue-screen {
       display: none; position: absolute; inset: 0;
-      background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
-      opacity: 0.25; pointer-events: none;
+      background-color: #0000e6; z-index: 1;
     }
 
     @keyframes blink { 50% { opacity: 0; } }
@@ -238,7 +236,7 @@
 
   <!-- VHS WELCOME SCREEN -->
   <div class="welcome-screen" id="welcomeScreen">
-    <div class="vhs-noise" id="vhsNoise"></div>
+    <div class="vhs-blue-screen" id="vhsBlueScreen"></div>
     <div class="welcome-content" id="welcomeContent">
       <div class="welcome-title glitch">HAYDEN S. LAGMAN</div>
       <p class="welcome-subtitle">TRACKING: BSIT PROGRAMMING PORTFOLIO</p>
@@ -300,11 +298,11 @@
           <!-- END CRT TV -->
 
           <div>
-            <h3 style="font-size: 2.5rem; margin-bottom: 15px;">Learning one line at a time.</h3>
-            <p>Hi! I'm <strong>Hayden S. Lagman</strong>, a first-year Bachelor of Science in Information Technology student at NU Clark.</p>
-            <p style="margin-top: 15px;">This terminal serves as my collection of midterm and final programming laboratory tasks. It reflects the activities I've worked on, the skills I've practiced, and my progress.</p>
+            <h3 style="font-size: 2.5rem; margin-bottom: 15px;">Decoding the future, one script at a time.</h3>
+            <p>I am <strong>Hayden S. Lagman</strong>, a passionate Information Technology student exploring the depths of software development and system architecture.</p>
+            <p style="margin-top: 15px;">This digital archive logs my academic journey, compiling source codes, laboratory milestones, and creative programming experiments as I build my technical foundation.</p>
             <div style="margin-top: 20px;">
-              <span class="tag">NU Clark</span><span class="tag">BSIT</span><span class="tag">Java</span>
+              <span class="tag">BSIT</span><span class="tag">Development</span><span class="tag">Logic</span>
             </div>
           </div>
         </div>
@@ -319,11 +317,11 @@
         </div>
         <div class="task-grid">
           <article class="task-card">
-            <div class="task-top"><span>MIDTERM_01</span><span>[JAVA]</span></div>
-            <h3>3×3 Matrix Operations</h3>
-            <p>Accepts nine numbers, displays the 3×3 matrix, calculates each row and column sum, and finds both diagonal sums.</p>
-            <a class="task-link" href="midterm/Matrix.java" target="_blank">View Source Code ></a>
-            <a class="task-link" href="images/task1-code.png" target="_blank">View Output Display ></a>
+            <div class="task-top"><span>MIDTERM_01</span><span>[CODE]</span></div>
+            <h3>Algorithm Design: Foundations</h3>
+            <p>A collection of initial programming exercises focusing on control structures, logical operators, and foundational data handling techniques.</p>
+            <a class="task-link" href="#" target="_blank">View Source Code ></a>
+            <a class="task-link" href="#" target="_blank">View Output Display ></a>
           </article>
         </div>
       </div>
@@ -337,29 +335,24 @@
         </div>
         <div class="task-grid">
           <div style="grid-column: 1/-1; padding: 40px; border: 2px dashed var(--line); text-align: center; font-family: 'VT323', monospace; font-size: 1.5rem; color: #777;">
-            NO SIGNAL... (WORK PENDING)
+            AWAITING BROADCAST... (IN PROGRESS)
           </div>
         </div>
       </div>
     </section>
 
     <section id="contact">
-      <div class="container">
+      <div class="container" style="text-align: center;">
         <div class="section-head">
           <p class="eyebrow">CH-05</p>
           <h2>TRANSMISSION <span>END</span></h2>
         </div>
-        <div class="about-grid">
-          <div>
-            <h3 style="font-size: 2rem;">Let's connect.</h3>
-            <p>The path has already been prepared. Now, all that remains is to take the next step. -Yhwach</p>
-          </div>
-          <div>
-            <h3 style="font-size: 2rem; margin-bottom: 15px;">Frequency Links</h3>
-            <!-- Add your own links between the quotes for href="" below -->
-            <a class="btn" href="#" target="_blank">INSTAGRAM</a>
-            <a class="btn" href="#" target="_blank">GITHUB</a>
-          </div>
+        <div>
+          <p style="margin-bottom: 25px; color: #aaa; max-width: 500px; margin-inline: auto;">Ready to establish a connection. Initiate contact through the secured channels below to collaborate or view more of my repositories.</p>
+          <h3 style="font-size: 2rem; margin-bottom: 15px;">Frequency Links</h3>
+          <!-- Add your own links between the quotes for href="" below -->
+          <a class="btn" href="#" target="_blank">INSTAGRAM</a>
+          <a class="btn" href="#" target="_blank">GITHUB</a>
         </div>
       </div>
     </section>
@@ -394,14 +387,14 @@
     const welcomeScreen = document.getElementById('welcomeScreen');
     const welcomeContent = document.getElementById('welcomeContent');
     const vhsPlayText = document.getElementById('vhsPlayText');
-    const vhsNoise = document.getElementById('vhsNoise');
+    const vhsBlueScreen = document.getElementById('vhsBlueScreen');
     
     const audio = document.getElementById('backgroundAudio');
     const musicToggle = document.getElementById('musicToggle');
 
     enterButton.addEventListener('click', async () => {
       welcomeContent.style.display = 'none';
-      vhsNoise.style.display = 'block';
+      vhsBlueScreen.style.display = 'block';
       vhsPlayText.style.display = 'block';
 
       try {
