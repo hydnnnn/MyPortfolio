@@ -3,21 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#020202">
-  <meta name="description" content="Hayden S. Lagman — BSIT Programming Portfolio and Digital Archive">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Hayden S. Lagman — Programming Portfolio">
   <title>Hayden S. Lagman | Programming Portfolio</title>
-
-  <!-- Faster non-blocking font loading -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
-
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
     :root {
       --bg: #020202;
-      --surface: #0a0a0a;
       --text: #e0e0e0;
-      --muted: #aaa;
       --vhs-green: #2ecc71;
       --vhs-blue: #3498db;
       --vhs-red: #e74c3c;
@@ -25,7 +19,7 @@
       --max: 1160px;
     }
 
-    *, *::before, *::after {
+    * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -44,34 +38,21 @@
       overflow-x: hidden;
     }
 
-    body.no-scroll {
-      overflow: hidden;
-    }
-
-    /* Global CRT Scanline Overlay */
+    /* CRT Scanline Overlay */
     body::after {
-      content: "";
+      content: " ";
+      display: block;
       position: fixed;
-      inset: 0;
-      z-index: 999;
-      pointer-events: none;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
       background:
         linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
         linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 999;
       background-size: 100% 3px, 3px 100%;
-    }
-
-    a { color: inherit; text-decoration: none; }
-    button, input { font: inherit; }
-
-    :focus-visible {
-      outline: 2px solid var(--vhs-green);
-      outline-offset: 3px;
-    }
-
-    .container {
-      width: min(var(--max), calc(100% - 40px));
-      margin-inline: auto;
+      pointer-events: none;
     }
 
     /* VHS Glitch Text Effect */
@@ -85,18 +66,28 @@
     }
 
     @keyframes glitch {
-      0%, 14% {
-        text-shadow: 0.05em 0 0 var(--vhs-red), -0.05em -0.025em 0 var(--vhs-green), -0.025em 0.05em 0 var(--vhs-blue);
-      }
-      15%, 49% {
-        text-shadow: -0.05em -0.025em 0 var(--vhs-red), 0.025em 0.025em 0 var(--vhs-green), -0.05em -0.05em 0 var(--vhs-blue);
-      }
-      50%, 99% {
-        text-shadow: 0.025em 0.05em 0 var(--vhs-red), 0.05em 0 0 var(--vhs-green), 0 -0.05em 0 var(--vhs-blue);
-      }
-      100% {
-        text-shadow: -0.025em 0 0 var(--vhs-red), -0.025em -0.025em 0 var(--vhs-green), -0.025em -0.05em 0 var(--vhs-blue);
-      }
+      0% { text-shadow: 0.05em 0 0 var(--vhs-red), -0.05em -0.025em 0 var(--vhs-green), -0.025em 0.05em 0 var(--vhs-blue); }
+      14% { text-shadow: 0.05em 0 0 var(--vhs-red), -0.05em -0.025em 0 var(--vhs-green), -0.025em 0.05em 0 var(--vhs-blue); }
+      15% { text-shadow: -0.05em -0.025em 0 var(--vhs-red), 0.025em 0.025em 0 var(--vhs-green), -0.05em -0.05em 0 var(--vhs-blue); }
+      49% { text-shadow: -0.05em -0.025em 0 var(--vhs-red), 0.025em 0.025em 0 var(--vhs-green), -0.05em -0.05em 0 var(--vhs-blue); }
+      50% { text-shadow: 0.025em 0.05em 0 var(--vhs-red), 0.05em 0 0 var(--vhs-green), 0 -0.05em 0 var(--vhs-blue); }
+      99% { text-shadow: 0.025em 0.05em 0 var(--vhs-red), 0.05em 0 0 var(--vhs-green), 0 -0.05em 0 var(--vhs-blue); }
+      100% { text-shadow: -0.025em 0 0 var(--vhs-red), -0.025em -0.025em 0 var(--vhs-green), -0.025em -0.05em 0 var(--vhs-blue); }
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin-inline: auto;
     }
 
     /* Navigation */
@@ -105,8 +96,7 @@
       inset: 0 0 auto;
       z-index: 50;
       height: 72px;
-      background: rgba(2, 2, 2, 0.92);
-      backdrop-filter: blur(4px);
+      background: rgba(2, 2, 2, 0.9);
       border-bottom: 2px solid var(--vhs-blue);
     }
 
@@ -136,10 +126,10 @@
     }
 
     .nav-links a {
-      color: var(--muted);
+      color: #aaa;
       font-size: 0.9rem;
       text-transform: uppercase;
-      transition: color 0.2s, text-shadow 0.2s;
+      transition: color 0.2s;
     }
 
     .nav-links a:hover {
@@ -154,39 +144,6 @@
       color: var(--vhs-green);
       padding: 8px 12px;
       cursor: pointer;
-    }
-
-    /* Typography & Shared Elements */
-    h1, h2, h3 {
-      font-family: 'VT323', monospace;
-      text-transform: uppercase;
-      font-weight: normal;
-    }
-
-    .eyebrow {
-      color: var(--vhs-green);
-      font-size: 1rem;
-      font-family: 'VT323', monospace;
-      letter-spacing: 0.1em;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 12px 24px;
-      border: 2px solid var(--text);
-      background: transparent;
-      color: var(--text);
-      text-transform: uppercase;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
-    }
-
-    .btn:hover {
-      background: var(--text);
-      color: var(--bg);
-      box-shadow: 4px 4px 0 var(--vhs-blue);
-      transform: translate(-2px, -2px);
     }
 
     /* Hero Section */
@@ -204,6 +161,21 @@
       gap: 30px;
     }
 
+    .eyebrow {
+      color: var(--vhs-green);
+      font-size: 1rem;
+      font-family: 'VT323', monospace;
+      letter-spacing: 0.1em;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'VT323', monospace;
+      text-transform: uppercase;
+      font-weight: normal;
+    }
+
     h1 {
       font-size: clamp(3rem, 10vw, 6rem);
       line-height: 1;
@@ -211,12 +183,8 @@
       color: #fff;
     }
 
-    h1 span { color: var(--vhs-blue); }
-
-    .hero-subtitle {
-      max-width: 600px;
-      margin: 20px auto;
-      color: var(--muted);
+    h1 span {
+      color: var(--vhs-blue);
     }
 
     .hero-actions {
@@ -224,6 +192,25 @@
       justify-content: center;
       gap: 15px;
       margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      border: 2px solid var(--text);
+      background: transparent;
+      color: var(--text);
+      text-transform: uppercase;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--text);
+      color: var(--bg);
+      box-shadow: 4px 4px 0 var(--vhs-blue);
+      transform: translate(-2px, -2px);
     }
 
     /* Sections */
@@ -237,8 +224,13 @@
       text-align: center;
     }
 
-    .section-head h2 { font-size: clamp(2.5rem, 5vw, 4rem); }
-    .section-head h2 span { color: var(--vhs-red); }
+    .section-head h2 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+    }
+
+    .section-head h2 span {
+      color: var(--vhs-red);
+    }
 
     /* About Grid */
     .about-grid {
@@ -248,32 +240,18 @@
       align-items: center;
     }
 
-    .about-copy h3 {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
-      line-height: 1.1;
-    }
-
-    .about-copy p + p {
-      margin-top: 15px;
-    }
-
-    .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
     .tag {
       display: inline-block;
       border: 1px solid var(--vhs-blue);
       padding: 5px 10px;
       font-size: 0.8rem;
+      margin: 5px;
       color: var(--vhs-blue);
     }
 
-    /* CRT Television Profile Picture */
+    /* =========================================
+       CRT TELEVISION PROFILE PICTURE
+       ========================================= */
     .tv-container {
       background: #1a1a1a;
       border: 4px solid #333;
@@ -281,9 +259,8 @@
       padding: 15px 25px 15px 15px;
       display: flex;
       gap: 15px;
-      box-shadow: inset 5px 5px 10px rgba(255, 255, 255, 0.05), 10px 10px 0 rgba(0, 0, 0, 0.8);
+      box-shadow: inset 5px 5px 10px rgba(255, 255, 255, 0.05), 10px 10px 0px rgba(0, 0, 0, 0.8);
       position: relative;
-      width: 100%;
       max-width: 350px;
       margin: 0 auto;
     }
@@ -309,7 +286,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
     }
 
     .tv-screen::after {
@@ -358,15 +334,12 @@
       content: "";
       position: absolute;
       top: 4px;
-      left: 11px;
+      left: 12px;
       width: 4px;
       height: 10px;
       background: #777;
       border-radius: 2px;
     }
-
-    .tv-knob--ch { transform: rotate(45deg); }
-    .tv-knob--vol { transform: rotate(-30deg); }
 
     .tv-speaker {
       flex: 1;
@@ -378,22 +351,23 @@
     /* Lab Tasks */
     .task-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
     }
 
     .task-card {
       border: 2px solid var(--line);
       padding: 25px;
-      background: var(--surface);
-      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      background: #0a0a0a;
+      transition: 0.1s;
+      position: relative;
     }
 
     .task-card:hover {
       border-color: var(--vhs-green);
       background: #000;
       box-shadow: 3px 3px 0 var(--vhs-red), -3px -3px 0 var(--vhs-blue);
-      transform: translateY(-3px);
+      transform: scale(1.02);
     }
 
     .task-top {
@@ -407,60 +381,26 @@
     .task-card h3 {
       font-size: 2rem;
       margin: 15px 0;
-      line-height: 1.1;
     }
 
     .task-link {
-      display: inline-block;
+      display: block;
       margin-top: 15px;
-      margin-right: 18px;
       color: #fff;
       text-decoration: underline;
       text-decoration-color: var(--vhs-blue);
-      text-underline-offset: 4px;
-      transition: color 0.15s;
     }
 
-    .task-link:hover { color: var(--vhs-green); }
-
-    .placeholder-box {
-      grid-column: 1 / -1;
-      padding: 40px 20px;
-      border: 2px dashed var(--line);
-      text-align: center;
-      font-family: 'VT323', monospace;
-      font-size: 1.5rem;
-      color: #777;
-    }
-
-    /* Contact Section */
-    .contact-wrap { text-align: center; }
-
-    .contact-lead {
-      margin: 0 auto 25px;
-      color: var(--muted);
-      max-width: 500px;
-    }
-
-    .contact-heading {
-      font-size: 2rem;
-      margin-bottom: 18px;
-    }
-
-    .contact-actions {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 15px;
+    .task-link:hover {
+      color: var(--vhs-green);
     }
 
     /* Footer & Audio Panel */
     footer {
-      padding: 30px 20px 90px;
+      padding: 30px;
       text-align: center;
-      font-size: 1rem;
+      font-size: 0.8rem;
       font-family: 'VT323', monospace;
-      color: var(--muted);
     }
 
     .music-panel {
@@ -471,7 +411,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 12px 15px;
+      padding: 15px;
       background: #000;
       border: 2px solid var(--text);
     }
@@ -484,7 +424,6 @@
       cursor: pointer;
       font-family: 'VT323', monospace;
       font-size: 1.2rem;
-      transition: background 0.15s, color 0.15s;
     }
 
     .music-panel button:hover {
@@ -492,22 +431,19 @@
       color: #000;
     }
 
-    .music-track {
-      font-family: 'VT323', monospace;
-      font-size: 1.2rem;
-      color: #fff;
+    .music-panel audio {
+      display: none;
     }
 
-    .music-panel audio { display: none; }
-
-    /* Animated VHS Welcome Sequence */
+    /* =========================================
+       ANIMATED VHS WELCOME SEQUENCE
+       ========================================= */
     .welcome-screen {
       position: fixed;
       inset: 0;
       z-index: 200;
       display: grid;
       place-items: center;
-      padding: 20px;
       background: #050505;
       transition: opacity 0.4s ease, visibility 0.4s ease;
     }
@@ -518,16 +454,390 @@
       pointer-events: none;
     }
 
-    .welcome-screen.is-gone {
-      display: none;
+    .welcome-content {
+      text-align: center;
     }
 
-    .welcome-content { text-align: center; }
-
     .welcome-title {
-      font-family: 'VT323', monospace;
       font-size: clamp(3rem, 8vw, 5rem);
       color: #fff;
       margin-bottom: 10px;
-      line-height: 1;
     }
+
+    .welcome-subtitle {
+      font-size: 1.2rem;
+      color: #aaa;
+      margin-bottom: 30px;
+      font-family: 'VT323', monospace;
+    }
+
+    .enter-button {
+      padding: 15px 30px;
+      border: 2px solid var(--vhs-green);
+      background: transparent;
+      color: var(--vhs-green);
+      font-family: 'VT323', monospace;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    .enter-button:hover {
+      background: var(--vhs-green);
+      color: #000;
+      box-shadow: 0 0 20px var(--vhs-green);
+    }
+
+    /* Animated VCR Classic Blue Screen */
+    .vhs-blue-screen {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background-color: #172074;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* VCR Tracking Band Animation */
+    .vhs-blue-screen::before {
+      content: "";
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 15%;
+      background: rgba(255, 255, 255, 0.05);
+      filter: blur(3px);
+      animation: tracking 2.5s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* VCR Moving Scanlines Overlay */
+    .vhs-blue-screen::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 200%;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 3px,
+        rgba(255, 255, 255, 0.03) 4px,
+        rgba(255, 255, 255, 0.03) 5px
+      );
+      animation: scanlines 4s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .vhs-play-text {
+      display: none;
+      position: absolute;
+      top: 10%;
+      left: 8%;
+      color: #fff;
+      font-family: 'VT323', monospace;
+      font-size: clamp(3rem, 10vw, 6rem);
+      text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+      z-index: 2;
+      animation: blink 1s step-end infinite;
+    }
+
+    .vhs-timecode {
+      display: none;
+      position: absolute;
+      bottom: 10%;
+      right: 8%;
+      color: #fff;
+      font-family: 'VT323', monospace;
+      font-size: clamp(2rem, 6vw, 4rem);
+      text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+      z-index: 2;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @keyframes tracking {
+      0% { top: -20%; opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { top: 120%; opacity: 1; }
+    }
+
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50px); }
+    }
+
+    @media (max-width: 850px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        width: 100%;
+        background: #000;
+        flex-direction: column;
+        padding: 20px;
+        border-bottom: 2px solid var(--vhs-blue);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- VHS SOUND EFFECT -->
+  <audio id="vhsSound" src="audio/VHS Tape Going Into VHS Player sound effect - Golden Sounds & Videos.mp3" preload="auto"></audio>
+
+  <!-- VHS WELCOME SCREEN -->
+  <div class="welcome-screen" id="welcomeScreen">
+    <div class="vhs-blue-screen" id="vhsBlueScreen"></div>
+    <div class="welcome-content" id="welcomeContent">
+      <div class="welcome-title glitch">HAYDEN S. LAGMAN</div>
+      <p class="welcome-subtitle">TRACKING: BSIT PROGRAMMING PORTFOLIO</p>
+      <button class="enter-button" id="enterPortfolio" type="button">INSERT TAPE</button>
+    </div>
+    <div class="vhs-play-text" id="vhsPlayText">PLAY</div>
+    <!-- The timecode will be animated by JavaScript -->
+    <div class="vhs-timecode" id="vhsTimecode">00:00:00:00</div>
+  </div>
+
+  <header class="topbar">
+    <nav class="nav container">
+      <a class="brand" href="#home">HYDNN<span>_</span></a>
+      <button class="menu-toggle" id="menuToggle" type="button">MENU</button>
+      <div class="nav-links" id="navLinks">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#midterm">Midterm</a>
+        <a href="#final">Final</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">CH-01 • AUTO TRACKING</p>
+          <h1 class="glitch">HAYDEN <span>S. LAGMAN</span></h1>
+          <p style="max-width: 600px; margin: 20px auto; color: #aaa;">Welcome to my programming archive.</p>
+          <div class="hero-actions">
+            <a class="btn" href="#midterm">ARCHIVES ↘</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">CH-02</p>
+          <h2>ABOUT <span>ME</span></h2>
+        </div>
+        <div class="about-grid">
+
+          <!-- CRT TV PROFILE PICTURE -->
+          <div class="tv-container">
+            <div class="tv-screen-wrapper">
+              <div class="tv-screen">
+                <div class="tv-osd">PLAY ►</div>
+                <!--
+                  CHANGE THE IMAGE SRC BELOW TO YOUR OWN PROFILE PICTURE
+                  Example: src="images/my-profile-pic.jpg"
+                -->
+                <img src="hydnpic.jpg" alt="Hayden Profile Picture">
+              </div>
+            </div>
+            <div class="tv-panel">
+              <div class="tv-knob" style="transform: rotate(45deg);"></div>
+              <div class="tv-knob" style="transform: rotate(-30deg);"></div>
+              <div class="tv-speaker"></div>
+            </div>
+          </div>
+          <!-- END CRT TV -->
+
+          <div>
+            <h3 style="font-size: 2.5rem; margin-bottom: 15px;">Decoding the future, one script at a time.</h3>
+            <p>I am <strong>Hayden S. Lagman</strong>, a passionate Information Technology student exploring the depths of software development and system architecture.</p>
+            <p style="margin-top: 15px;">This digital archive logs my academic journey, compiling source codes, laboratory milestones, and creative programming experiments as I build my technical foundation.</p>
+            <div style="margin-top: 20px;">
+              <span class="tag">BSIT</span>
+              <span class="tag">Development</span>
+              <span class="tag">Logic</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="midterm">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">CH-03</p>
+          <h2>MIDTERM <span>LAB TASKS</span></h2>
+        </div>
+        <div class="task-grid">
+          <article class="task-card">
+            <div class="task-top"><span>MIDTERM_01</span><span>[CODE]</span></div>
+            <h3>Multi-Dimensional Arrays: Matrix Operations</h3>
+            <p>A practical Java programming exercise focusing on 2D array manipulation, matrix arithmetic computations for row, column, and diagonal sums, and iterative control structures for formatted data display and continuous user input.</p>
+            <a class="task-link" href="sourcecode.png" target="_blank">View Source Code &gt;</a>
+            <a class="task-link" href="midterm/Midterm Lab 1.pdf" target="_blank">View Documentation &gt;</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="final">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">CH-04</p>
+          <h2>FINAL <span>LAB TASKS</span></h2>
+        </div>
+        <div class="task-grid">
+          <div style="grid-column: 1/-1; padding: 40px; border: 2px dashed var(--line); text-align: center; font-family: 'VT323', monospace; font-size: 1.5rem; color: #777;">
+            AWAITING BROADCAST... (IN PROGRESS)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container" style="text-align: center;">
+        <div class="section-head">
+          <p class="eyebrow">CH-05</p>
+          <h2>TRANSMISSION <span>END</span></h2>
+        </div>
+        <div>
+          <p style="margin-bottom: 25px; color: #aaa; max-width: 500px; margin-inline: auto;">Initiate contact through the secured channels below to collaborate or view more of my repositories.</p>
+          <h3 style="font-size: 2rem; margin-bottom: 15px;">Frequency Links</h3>
+          <!-- Add your own links between the quotes for href="" below -->
+          <a class="btn" href="https://www.instagram.com/hydnlgmn/" target="_blank">INSTAGRAM</a>
+          <a class="btn" href="https://github.com/hydnnnn/MyPortfolio" target="_blank">GITHUB</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">© <span id="year"></span> HAYDEN S. LAGMAN // END OF TAPE</div>
+  </footer>
+
+  <div class="music-panel">
+    <button id="musicToggle" type="button">▶ AUDIO</button>
+    <span style="font-family: 'VT323', monospace; font-size: 1.2rem; color: #fff;">KASAMA_KITA.MP3</span>
+    <audio id="backgroundAudio" src="audio/Kasama Kita - Munimuni.mp3" loop preload="none"></audio>
+  </div>
+
+  <script>
+    // Mobile Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // Set Copyright Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // VHS WELCOME SEQUENCE & AUDIO LOGIC
+    const enterButton = document.getElementById('enterPortfolio');
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const welcomeContent = document.getElementById('welcomeContent');
+    const vhsPlayText = document.getElementById('vhsPlayText');
+    const vhsTimecode = document.getElementById('vhsTimecode');
+    const vhsBlueScreen = document.getElementById('vhsBlueScreen');
+
+    const vhsSound = document.getElementById('vhsSound');
+    const audio = document.getElementById('backgroundAudio');
+    const musicToggle = document.getElementById('musicToggle');
+
+    let timecodeInterval;
+
+    enterButton.addEventListener('click', async () => {
+      // Hide intro content, show Blue Screen + PLAY + Timecode
+      welcomeContent.style.display = 'none';
+      vhsBlueScreen.style.display = 'block';
+      vhsPlayText.style.display = 'block';
+      vhsTimecode.style.display = 'block';
+
+      // Start the ticking timecode animation (Frames and Seconds)
+      let frames = 0;
+      timecodeInterval = setInterval(() => {
+        frames++;
+        const seconds = Math.floor(frames / 30);
+        const frameCount = frames % 30;
+        const secStr = seconds.toString().padStart(2, '0');
+        const frameStr = frameCount.toString().padStart(2, '0');
+        vhsTimecode.textContent = `00:00:${secStr}:${frameStr}`;
+      }, 33); // Updates ~30 times a second to mimic 30fps video
+
+      // Play VHS Insert Sound Effect
+      try {
+        await vhsSound.play();
+      } catch (error) {
+        console.log('VHS audio blocked');
+      }
+
+      // Start Background Music
+      try {
+        await audio.play();
+        musicToggle.textContent = '⏸ PAUSE';
+      } catch (error) {
+        musicToggle.textContent = '▶ PLAY';
+      }
+
+      // Wait 2.5 seconds, then stop timecode and fade out transition screen
+      setTimeout(() => {
+        clearInterval(timecodeInterval);
+        welcomeScreen.classList.add('leaving');
+      }, 2500);
+    });
+
+    // Background Music Toggle Button
+    musicToggle.addEventListener('click', async () => {
+      if (audio.paused) {
+        try {
+          await audio.play();
+          musicToggle.textContent = '⏸ PAUSE';
+        } catch (error) {
+          musicToggle.textContent = '▶ PLAY';
+        }
+      } else {
+        audio.pause();
+        musicToggle.textContent = '▶ AUDIO';
+      }
+    });
+
+    audio.addEventListener('pause', () => {
+      musicToggle.textContent = '▶ AUDIO';
+    });
+
+    audio.addEventListener('play', () => {
+      musicToggle.textContent = '⏸ PAUSE';
+    });
+  </script>
+</body>
+</html>
